@@ -32,12 +32,28 @@ function draw() {
   background(0);
   const spectrum = fft.analyze();
   moonAndGround();
-  const carBrightness = sin(frameCount / 10) * 20 + 80;
-  for (let i = 0; i < cars.length; i++) {
-    cars[i].render(carBrightness);
-  }
-  for (let i = 0; i < buildings.length; i++) {
-    buildings[i].render(spectrum);
+  showBuildings(spectrum);
+  // const carBrightness = sin(frameCount / 10) * 20 + 80;
+  // for (let i = 0; i < cars.length; i++) {
+  //   cars[i].render(carBrightness);
+  // }
+  // for (let i = 0; i < buildings.length; i++) {
+  //   buildings[i].showBack();
+  // }
+  // for (let i = 0; i < buildings.length; i++) {
+  //   buildings[i].render(spectrum);
+  // }
+}
+
+function showBuildings(spectrum) {
+  for (let zIndex = 1; zIndex < 5; zIndex++) {
+    const rowOfBuildings = buildings.filter(building => building.z === zIndex);
+    for (let i = 0; i < rowOfBuildings.length; i++) {
+      rowOfBuildings[i].showBack();
+    }
+    for (let i = 0; i < rowOfBuildings.length; i++) {
+      rowOfBuildings[i].render(spectrum);
+    }
   }
 }
 

@@ -4,14 +4,16 @@ class Building {
     const minHeight = height * 0.1;
     const yMargin = height * 0.2;
     const yOffset = height * (0.02 * zIndex);
+    const addedHeight = random(minHeight);
+    const buildingHeight = minHeight + (zIndex / 3) * minHeight + addedHeight;
     this.hue = floor(random(0, 360));
+    this.addedHeight = addedHeight;
     this.x = x;
-    this.y = yMargin + zIndex * yOffset;
+    this.y = yMargin + zIndex * yOffset - addedHeight;
     this.z = zIndex;
     this.w = minWidth + (zIndex / 3) * minWidth;
-    // this.w = minWidth * zIndex;
-    this.h = minHeight + (zIndex / 3) * minHeight;
-    // this.h = minHeight * zIndex;
+    this.h = buildingHeight;
+    //this.h = minHeight + (zIndex / 3) * minHeight;
     this.cols = 4;
     this.chooseColumnNumber();
   }
@@ -21,16 +23,21 @@ class Building {
   };
 
   render = (spectrum) => {
-    this.show(spectrum);
+    this.showFront(spectrum);
     this.move();
     this.checkIfResetNeeded();
   };
 
-  show = (spectrum) => {
+  showFront = (spectrum) => {
     const {x, y, w, h, cols} = this;
-    this.restOfBuilding();
+    //this.sideOfRoad();
+    //this.restOfBuilding();
     this.frontOfBuilding();
     gridOfLights(spectrum, x, y, w, h, cols);
+  };
+
+  showBack = () => {
+    this.restOfBuilding();
   };
 
   frontOfBuilding = () => {
@@ -39,15 +46,46 @@ class Building {
     rect(x, y, w, h);
   };
 
+  // sideOfRoad = () => {
+  //   const {x, y, w, h, z, hue} = this;
+  //   if (z !== 4) return;
+  //   const xFromBuildingLeft = w * 1.5;
+  //   const xFromCenter = x - width / 2 + xFromBuildingLeft;
+  //   const skewDenominator = 13 - (z * 1.2);
+  //   const skew = xFromCenter / skewDenominator;
+  //   const centralSkewFactor = w * 0.05;
+  //   const topRightCorner = w - centralSkewFactor - skew;
+  //   const topLeftCorner = centralSkewFactor - skew;
+  //   const yDistBetweenRoads = height * 0.14;
+  //   const bottomOfHigherRoad = height * lowerRoadYMultiplier + height * 0.04;
+  //   // Top of building
+  //   fill(0, 0, 0);
+  //   push();
+  //   translate(x + w * 1.5, bottomOfHigherRoad);
+  //   beginShape();
+  //   // Bottom Left
+  //   vertex(topLeftCorner, 0);
+  //   // Bottom Right
+  //   vertex(topRightCorner, 0);
+  //   // Top Right
+  //   vertex(w, yDistBetweenRoads);
+  //   // Top Left
+  //   vertex(0, yDistBetweenRoads);
+  //   endShape(CLOSE);
+  //   pop();
+  // };
+
   restOfBuilding = () => {
-    const {x, y, w, h, z, hue} = this;
-    const yBackOfRoof = 0 - (h * (0.1 - (5 - z) / 100));
+    const {x, y, w, h, z, hue, addedHeight} = this;
+    const reductionFromAddedHeight = addedHeight * 0.1;
+    const yBackOfRoof = 0 - (h * (0.1 - (5 - z) / 100)) + reductionFromAddedHeight;
     const xFromCenter = x - width / 2;
-    const skewDenominator = 13 - (z * 1.2);
+    const skewDenominator = 15 + ((5 - z) * 1.2);
     const skew = xFromCenter / skewDenominator;
     const centralSkewFactor = w * 0.2;
     const topRightCorner = w - centralSkewFactor - skew;
     const topLeftCorner = centralSkewFactor - skew;
+    // Top of building
     fill(hue, 20, 70);
     push();
     translate(x, y);
@@ -61,6 +99,7 @@ class Building {
     // Top Left
     vertex(topLeftCorner, yBackOfRoof);
     endShape(CLOSE);
+    // -=-=-= Side of Building =-=-=-
     // If both top corners are inside the bottom corners we don't see the sides
     // If top left corner is more left than bottom left, show left side
     const bottomFarOffset = h * 0.2;

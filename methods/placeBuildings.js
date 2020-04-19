@@ -1,4 +1,18 @@
 function placeBuildings() {
+  placeRowOfBuildings(20, 1);
+  placeRowOfBuildings(14, 2);
+  placeRowOfBuildings(10, 3);
+  placeRowOfBuildings(8, 4);
+}
+
+function placeRowOfBuildings(buildingCount, zIndex) {
+  for (let i = 0; i < buildingCount; i++) {
+    const xDist = width / buildingCount;
+    buildings.push(new Building(xDist * i, zIndex));
+  }
+}
+
+function placeBuildingsOld() {
   // Place buildings with higher zIndex (second argument) last
   buildings.push(new Building(0));
   buildings.push(new Building(width * 0.125, 1));

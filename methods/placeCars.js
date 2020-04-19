@@ -1,20 +1,17 @@
 function placeCars() {
-  const carLaneValues = getCarLaneValues();
-  carLaneValues.forEach(options => {
-    placeLaneOfCars(options);
-  });
+
 }
 
-function placeLaneOfCars(options) {
-  const {yPosition, totalCars, speed} = options;
-  const fractionOfWidth = width / totalCars;
-  const xWiggleRoom = fractionOfWidth * 0.45;
-  for (let i = 0; i < totalCars; i++) {
-    const xPosition = fractionOfWidth * i;
-    const xWiggle = floor(random(-xWiggleRoom, xWiggleRoom));
-    cars.push(new Car(xPosition + xWiggle, yPosition, speed));
-  }
-}
+// function placeLaneOfCars(options) {
+//   const {yPosition, totalCars, speed} = options;
+//   const fractionOfWidth = width / totalCars;
+//   const xWiggleRoom = fractionOfWidth * 0.45;
+//   for (let i = 0; i < totalCars; i++) {
+//     const xPosition = fractionOfWidth * i;
+//     const xWiggle = floor(random(-xWiggleRoom, xWiggleRoom));
+//     cars.push(new Car(xPosition + xWiggle, yPosition, speed));
+//   }
+// }
 
 // function frontRoadRightCars() {
 //   const frontRoadRightSide = height * 0.81;
